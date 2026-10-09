@@ -1,0 +1,74 @@
+task: segmentation
+
+data:
+  root: /datasets/fireData
+
+  image_pattern: "Landsat89_2ndMIN_SR_MAX_ST_DN_2023_region{region}.tif"
+  target_pattern: "NBAC_2023_region{region}.tif"
+
+  bands:
+    - SR_B1
+    - SR_B2
+    - SR_B3
+    - SR_B4
+    - SR_B5
+    - SR_B6
+    - SR_B7
+    - ST_B10
+
+  num_channels: 8
+
+  train_regions:
+    - 1
+
+  val_regions:
+    - 2
+
+  test_regions:
+    - 3
+
+preprocessing:
+  landsat_scaling: true
+  normalization: zscore
+  stats_path: /processed/fireData/fire_train_stats.json
+
+patches:
+  size: 128
+  stride: 64
+  min_optical_valid_fraction: 0.95
+
+  index_path: /processed/fireData/fire_patch_index.csv
+  summary_path: /outputs/fire/tables/patch_summary.csv
+
+visualization:
+  rgb:
+    # Fixed physical reflectance limits, shared by all RGB channels.
+    min: 0.0
+    max: 0.10
+    # Gamma > 1 brightens low positive reflectance.
+    gamma: 2.2
+    # Lift valid dark pixels to charcoal; missing pixels remain black.
+    # Set to 0 to restore a black display floor.
+    shadow_floor: 0.08
+
+model:
+  name: unet
+  encoder: resnet34
+  in_channels: 8
+  num_classes: 1
+
+training:
+  batch_size: 16
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+  epochs: 30
+  amp: true
+  num_workers: 2
+  seed: 42
+  threshold: 0.5
+  early_stopping_patience: 8
+
+output:
+  checkpoint_dir: /checkpoints/fire
+  output_dir: /outputs/fire
+  tensorboard_dir: /outputs/fire/tensorboard

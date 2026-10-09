@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data (never committed)
+data/
+datasets/
+*.tif
+*.tiff
+*.nc
+*.zarr/
+*.h5
+*.hdf
+*.npy
+*.npz
+*.parquet
+*.csv
+*.gpkg
+*.shp
+*.shx
+*.dbf
+*.prj
+
+# Model weights and training outputs
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+checkpoints/
+outputs/
+runs/
+logs/
+lightning_logs/
+wandb/
+.cache/
+
+# Secrets and editor files
+.env
+*.key
+.vscode/
+.idea/
+.DS_Store
